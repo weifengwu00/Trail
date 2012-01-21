@@ -1,0 +1,66 @@
+#----- Metin Uyanik ---
+#-- Math Hw about CRRA Asset Choice -----#
+
+# IMPORTANT Note: This Program will Take around 2.5 minutes to finish running. 
+#                 due to the lack of numerical integration function in the presence of 
+#                 parameters in the function of R. Or may be we cannot find it.
+#                 Thus, we use loops for rho and Zeta. This is the reason why it is soo 
+#                 slow to produce result.
+
+
+#Parameter Values
+r=0.04; rfree=0; phi=r-rfree; sigma=0.2;
+
+#Zeta_approx:=The approximated optimal proportion invested in the risky asset
+
+Zeta_approx<-function(rho){phi/(rho*sigma^2)}
+
+# First Graph
+par(mfrow=c(2,1))
+par(mar=c(1,2,2,1) + 0.5) 
+par(oma=c(1,1,1,1))
+plot(Zeta_approx,xlim=c(1,5),main=expression(paste("r=0.04,  ",sigma,"=0.2")),xlab=expression(rho),ylab=expression(zeta))
+
+##The Differebce Between the Exact and the Approximated solution
+
+integrand<-function(Phi)
+{(1+(Phi-1)*Zeta)^(1-rho)*dlnorm(Phi,meanlog=phi-sigma^2/2,sdlog=sigma)}
+
+# Here, I choose number of Zeta as much as possible and Number of rho at reasonable level 
+# to produce fast and correct results.
+# For 50001 Zeta's in [0,1], 51 rho's in [1,5], calculate E_t(u(c_tp1)),record it in a matrix S
+
+Zeta_vec=seq(0,1,by=1/5000);
+rho_vec=seq(1,5,by=4/50);
+S=matrix(0,nrow=length(Zeta_vec),ncol=length(rho_vec));
+for (i in 1:length(Zeta_vec))
+{
+for (j in 1:length(rho_vec))
+{
+Zeta=Zeta_vec[i];
+rho=rho_vec[j];
+Int=integrate(integrand,lower=0,upper=Inf)
+S[i,j]=Int$value;
+}
+}
+
+#Define a vector v to record where the maximum is attained, and a vector Zeta_opt to record the corresponding Zeta
+v=rep(0,times=length(rho_vec));
+Zeta_opt=rep(0,times=length(rho_vec));
+for (j in 1:length(rho_vec))
+{
+b=sort.int(S[,j],index.return=TRUE);
+v[j]=b$ix[1];
+Zeta_opt[j]=(v[j]-1)/(length(Zeta_vec)-1);
+}
+
+#Define the difference between the exact Zeta and the approximated Zeta
+Diff=rep(0,times=length(rho_vec));
+for (j in 1:length(rho_vec))
+{
+Diff[j]=Zeta_opt[j]-Zeta_approx(rho_vec[j]);
+}
+
+#Plot the difference versus rho
+plot(rho_vec,Diff,type="l",ylim=c(-0.005,0.002),main=expression(paste("r=0.04,  ",sigma,"=0.2")),xlab=expression(rho),ylab="Error")
+abline(0,0)

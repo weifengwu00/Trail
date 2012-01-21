@@ -1,0 +1,269 @@
+\documentclass{bejournal}
+\usepackage{subfigure}
+% CDCPrivate: Derivations and verification are available in ../Software/Mathematica/
+
+\input CDCDocStartForBE.tex 
+
+\input HandoutStart.tex
+
+\begin{document}
+\input HandoutHeader.tex
+
+\begin{verbatimwrite}{\jobname.title}
+Portfolio Choice with CRRA Utility (Merton-Samuelson)
+\end{verbatimwrite}
+\medskip\medskip\medskip
+
+\input HandoutName.tex
+
+\begin{verbatimwrite}{./body.tex}
+
+  \cite{merton:restat} and \cite{samuelson:portfolio} study the
+  optimal portfolio choice of a consumer with Constant Relative Risk
+  Aversion utility $\util(c) = (1-\CRRA)^{-1}c^{1-\CRRA}$.  This
+  consumer has assets at the end of period $t$ equal to $a_{t}$ and is
+  deciding how much to invest in a risky asset with a lognormally
+  distributed return factor $\Risky_{t+1}$, $\log \Risky_{t+1} =
+  \risky_{t+1} \sim
+  \mathcal{N}(\risky-\Evarr/2,\sigma^{2}_{\risky})$,\footnote{\MathFacts~\handoutM{ELogNorm}
+    tells us that a variable with this lognormal distribution has an
+    expected return factor of
+    $\Ex_{t}[e^{\risky_{t+1}}]=e^{\risky}=\Risky$ (where variables
+    like $\Risky$ without a subscript are the time-invariant mean).}
+  versus a riskfree asset that earns return factor
+  $\Rfree=e^{\rfree}$.  Importantly, the consumer is assumed to have
+  no labor income and to face no risk except from the investment in
+  the risky asset.\footnote{A common interpretation is that this is
+    the problem of a retired investor who expects to receive no
+    further labor income.  Note however that {\it all} risks other
+    than the returns from financial investments have been ruled out;
+    for example, health expense risk is not possible in this model,
+    though recent research has argued such risk is important later in
+    life.}$^{,}$\footnote{Riskless labor income can trivially be added
+    to the problem, because its risklessness means that (in the
+    absence of liquidity constraints) it is indistinguishable from a
+    lump sum of extra current wealth with a value equal to the present
+    discounted value (using the riskless rate) of the (riskless)
+    future labor income.  Of course, in practice, labor income is not
+    riskless, but when labor income is risky the problem no longer has
+    the tidy analytical solution we present here and must be solved
+    numerically.  See \cite{SolvingMicroDSOPs} for an introduction to
+    numerical solution methods.}
+
+Both papers consider a multiperiod optimization problem, but here we
+examine the problem of a consumer in a period $t$ which is the
+second-to-last period of life (the insights, and even the formulas,
+carry over to the multiperiod case).
+
+If the period-$t$ consumer invests proportion $\riskyshare$ in the risky asset, 
+spending all available resources in the last period of life $t+1$ will yield:
+\begin{eqnarray}
+        c_{t+1} & = & \left(\Rfree(1-\riskyshare)+\Risky_{t+1}\riskyshare\right)a_{t} \notag
+\\ & = & \underbrace{\left(\Rfree+(\Risky_{t+1}-\Rfree)\riskyshare\right)}_{\equiv \Rport_{t+1}}a_{t} \label{eq:RportDef}
+\end{eqnarray}
+where $\Rport_{t+1}$ is the realized arithmetic\footnote{Google ``arithmetic geometric mean wiki'' for a refresher on the difference between arithmetic and geometric means.} return factor for the portfolio.
+
+For mathematical analysis (especially under the assumption of CRRA
+utility) it would be convenient if we could approximate the realized
+arithmetic portfolio return factor by the realized geometric return
+factor
+$\Rport_{t+1}=\Rfree^{1-\riskyshare}\Risky_{t+1}^{\riskyshare}$,
+because then the logarithm of the return factor would be $\rport_{t+1}
+= \rfree (1-\riskyshare)+\risky_{t+1}\riskyshare = \rfree +
+(\risky_{t+1}-\rfree)\riskyshare = \rfree + \eprem_{t+1} \riskyshare$
+and the realized `portfolio excess return' would be simply
+$\rport_{t+1}-\rfree = \riskyshare\eprem_{t+1}$.  Unfortunately, for
+$\riskyshare$ values well away from 0 and 1 (that is, for any {\it
+  interesting} values of portfolio shares), the geometric mean is a
+badly biased approximation to the arithmetic mean when the variance of
+the risky asset is substantial.
+
+\cite{cvAppendix} point out that a much better approximation is obtained by assuming
+%\begin{eqnarray}
+%  \rport_{t+1} &  = & \rfree + \riskyshare (\eprem_{t+1}+\sigma^{2}_{\risky}/2) - \riskyshare^{2}\sigma^{2}_{\risky}/2
+%\end{eqnarray}
+\begin{eqnarray}
+  \rport_{t+1} & = & \rfree+ \riskyshare \eprem_{t+1}+\riskyshare \sigma^{2}_{\risky}/2 - \riskyshare^{2}\sigma^{2}_{\risky}/2 \label{eq:rportCV}.
+\end{eqnarray}
+
+To see one virtue of this approximation, note (using \handoutM{NormTimes} and \handoutM{SumNormsIsNorm}) that since the mean and variance of $\eprem_{t+1} \riskyshare$ are respectively $\riskyshare(\risky - \sigma^{2}_{\risky}/2- \rfree)$ and $\riskyshare^{2} \sigma^{2}_{\risky}$, \handoutM{LogELogNormTimes} implies that  
+\begin{eqnarray}
+%   (\risky_{t+1}-\sigma^{2}_{\risky}/2)\riskyshare & \sim & \mathcal{N}(\riskyshare (\risky-\sigma^{2}_{\risky}/2),\riskyshare^{2} \sigma^{2}_{\risky}) \\
+ \log \Ex_{t}[e^{\eprem_{t+1} \riskyshare}] & = & \riskyshare (\risky - \rfree - \sigma^{2}_{\risky}/2) + \riskyshare^{2}\sigma^{2}_{\risky}/2 
+\end{eqnarray}
+%so 
+%\begin{eqnarray}
+%  \log \Ex_{t}[e^{\riskyshare (\risky_{t+1}-\sigma^{2}_{\risky}/2)}] & = & \riskyshare (\risky-\sigma^{2}_{\risky}/2)+\riskyshare^{2}\sigma^{2}_{\risky}/2
+%\end{eqnarray}
+which means that exponentiating then taking the expectation then taking the logarithm of \eqref{eq:rportCV} gives 
+\begin{eqnarray}
+   \log \Ex_{t}[e^{\rport_{t+1}}] & = & \log e^{\rfree} + \log \Ex_{t}[e^{\riskyshare \eprem_{t+1}}] + \log e^{\riskyshare\sigma^{2}_{\risky}/2 - \riskyshare^{2}\sigma^{2}_{\risky}/2}
+\\ & = & 
+\rfree + \riskyshare (\risky-\rfree-\sigma^{2}_{\risky}/2)+\riskyshare^{2}\sigma^{2}_{\risky}/2 +\riskyshare \sigma^{2}_{\risky}/2 - \riskyshare^{2}\sigma^{2}_{\risky}/2 
+\\ \log \Ex_{t}[e^{\rport_{t+1}}] - \rfree & = &  \riskyshare (\risky-\rfree) \label{eq:rportDist}
+\end{eqnarray}
+or, in words: The expected excess portfolio return is equal to the proportion invested in the risky asset times the expected return of the risky asset.\footnote{We use the word `return' always to mean the logarithm of the corresponding `factor'; and when not explicitly specified, we always take the expectation before taking the log; if we wanted to refer to $\Ex_{t}[\rport_{t+1}]$ we would call it the expected log portfolio return (to distinguish it from the expected portfolio return $\log \Ex_{t}[e^{\rport_{t+1}}]$.}
+
+Under these assumptions, the expectation as of date $t$ of utility at date $t+1$
+is:
+\begin{eqnarray}
+  \Ex_{t}[\util(c_{t+1})] & \approx & (1-\CRRA)^{-1}\Ex_{t}\left[\left(a_{t}e^{\rfree}e^{\riskyshare \eprem_{t+1}+\riskyshare(1-\riskyshare)\sigma^{2}_{\risky}/2 }\right)^{1-\CRRA}\right] \notag
+\\                      & \approx & (1-\CRRA)^{-1}\Ex_{t}\left[(a_{t}\Rfree)^{1-\CRRA}\left( e^{\riskyshare \eprem_{t+1}+\riskyshare(1-\riskyshare)\sigma^{2}_{\risky}/2 }\right)^{1-\CRRA}\right] \notag
+\\                      & \approx & (1-\CRRA)^{-1}(a_{t}\Rfree)^{1-\CRRA}\Ex_{t}\left[e^{(\riskyshare \eprem_{t+1}+\riskyshare(1-\riskyshare)\sigma^{2}_{\risky}/2)  (1-\CRRA)}\right] \notag
+\\                      & \approx & \underbrace{(1-\CRRA)^{-1}(a_{t}\Rfree)^{1-\CRRA}}_{\text{constant $< 0$}}\underbrace{e^{ (1-\CRRA)\riskyshare(1-\riskyshare)\sigma^{2}_{\risky}/2}\Ex_{t}\left[e^{\riskyshare \eprem_{t+1}  (1-\CRRA)}\right]}_{\text{excess return utility factor}}
+ \label{eq:exputil}
+  \end{eqnarray}
+where the first term is a negative constant under the usual assumption that relative risk aversion $\CRRA>1.$
+
+  Our foregoing assumptions imply that $\riskyshare (1-\CRRA) \eprem_{t+1}
+   \sim \mathcal{N}(\riskyshare (1-\CRRA)(\eprem -
+  \Evarr/2),(\riskyshare(1-\CRRA))^{2}\Evarr)$ (again using 
+  \handoutM{LogELogNormTimes}).  With a couple of extra
+  lines of derivation we can show that the log of the expectation in \eqref{eq:exputil} is
+\begin{eqnarray}
+  \log \Ex_{t}\left[e^{\riskyshare \eprem_{t+1}  (1-\CRRA)}\right] & = & {(1-\CRRA)\riskyshare \eprem-(1-\CRRA)\riskyshare\Evarr/2+ ((1-\CRRA)\riskyshare)^{2}\Evarr/2} \notag
+\\  & = & {(1-\CRRA)\riskyshare \eprem-(1-\CRRA)\riskyshare(1-\riskyshare(1-\CRRA))\Evarr/2} \notag
+\\  & = & {(1-\CRRA)\riskyshare \eprem-(1-\CRRA)\riskyshare(1-\riskyshare)\Evarr/2-\CRRA (1-\CRRA)\riskyshare^{2}\Evarr/2}. \label{eq:Ex}
+\end{eqnarray}
+
+Substitute from \eqref{eq:Ex} for the log of the expectation in
+\eqref{eq:exputil} and note that the resulting expression simplifies because it contains
+${(1-\CRRA)\riskyshare\Evarr/2-(1-\CRRA)\riskyshare\Evarr/2}=0$; 
+thus the log of the `excess return utility factor' in \eqref{eq:exputil} is
+\begin{equation}
+  -(\CRRA-1)\riskyshare \eprem - (\CRRA-1)(- \CRRA \riskyshare^{2}\Evarr/2)
+\end{equation}
+and the $\riskyshare$ that minimizes the log will also
+minimize the level; minimizing this when $\CRRA>1$ is equivalent to
+maximizing the terms multiplied by $-(\CRRA-1)$, so our problem
+reduces to
+\[
+\max_{\riskyshare}~~ \riskyshare \eprem -\CRRA\riskyshare^{2}\Evarr/2 
+\]
+with FOC
+\begin{eqnarray}
+         \eprem-\riskyshare\CRRA\Evarr  & = & 0  \notag \\ 
+\riskyshare & = & \left(\frac{\eprem}{\CRRA \Evarr}\right)
+. \label{eq:riskyshareMS}
+\end{eqnarray}
+
+Equation \eqref{eq:riskyshareMS} says\footnote{This expression differs
+  slightly from that derived by \cite{cvAppendix}, because we adjust
+  the mean logarithmic return of the risky investment for its variance
+  in order to keep the mean return factor constant, which makes
+  comparisons of alternative levels of risk more transparent.}  that the
+consumer allocates more of his portfolio to the high-risk, high-return
+asset when
+\begin{enumerate}
+\item the amount $\eprem$ by which the risky
+asset's return exceeds the riskless return is greater
+\item the consumer is less risk averse ($\CRRA$ is lower)
+\item riskiness $\sigma^{2}_{\risky}$ is less
+\end{enumerate}
+If there is no excess return, nothing will be put in the risky asset.  Similarly, if 
+risk aversion or the variance of the risk is infinity, again nothing 
+will be put in the risky asset.\footnote{See the appendix for a figure
+  showing the quality of the approximation.}
+
+%\begin{comment} % Removed because the calibration yields yields for \CRRA = 1 a portfolio share of 2 according to the approximate formula but the exact formula implies the portfolio share cannot reach 1; for a better calibration, the point is less compelling 
+This formula hints at the existence of an `equity premium puzzle'
+(\cite{mehra&prescott:puzzle}).  Interpreting the risky asset as the
+aggregate stock market, the annual standard deviation of the log of
+U.S.\ stock returns has historically been about $\sigma_{\risky}=0.2$
+yielding $\Evarr = 0.04$.  The equity premium over historical periods
+has been something like $\eprem = 0.08$ (eight percent).  With risk
+aversion of $\CRRA=2$ this formula implies that the share of risky
+assets in your portfolio should be $0.08/0.08$ or 100 percent!  The
+fact that most people have less than 100 percent of their wealth
+invested in stocks is the `stockholding puzzle,' the microeconomic
+manifestation of the equity premium puzzle
+(\cite{haliassos&bertaut:fewholdstocks}).
+
+To avoid the problems caused by a prediction of a risky portfolio
+share greater than one, we can calibrate the model with more modest
+expectations for the equity premium.  Some researchers have argued
+that when evidence for other countries and longer time periods is
+taken into account, a plausible average value of the premium might be
+as low as three percent.  Figure~\ref{fig:Port} shows the relationship
+between the portfolio share and relative risk aversion for a
+calibration that assumes a modest premium of 3 percent and a large
+standard deviation of $\sigma=0.2$.  Even when risks are this high and
+the premium is this low, if relative risk aversion is close to
+logarithmic ($\CRRA = 1$ the investor wants to put well over half of
+the portfolio in the risky asset.  Only for values of risk aversion
+greater than 2 does the predicted portfolio share reach plausibly
+small values.
+
+%\end{comment}
+
+
+A final interesting question is what the expected rate of return on
+the consumer's portfolio will be once the portfolio share in risky
+assets has been chosen optimally.  Note first that \eqref{eq:rportDist}
+implies that 
+\begin{eqnarray}
+  \log \Ex_{t}[e^{\rport_{t+1}-\rfree}] & = & \riskyshare \eprem  \label{eq:eport}
+\end{eqnarray}
+while the variance of the log of the excess return factor for the portfolio is $\sigma^{2}_{\rport} = \riskyshare^{2} \sigma^{2}_{\risky}.$
+
+Substituting the solution \eqref{eq:riskyshareMS} for $\riskyshare$ into \eqref{eq:eport}, we have
+\begin{eqnarray}
+  \riskyshare \eprem & = & \left(\frac{\eprem^{2}}{\CRRA \Evarr}\right)  \notag
+\\ & = &  (\eprem/\sigma_{\risky})^{2}/\CRRA \label{eq:rportPremOpt}
+\end{eqnarray}
+which is an interesting formula for the excess return of the optimally
+chosen portfolio because the object $\eprem/\sigma_{\risky}$ (the
+excess return divided by the standard deviation) is a well-known tool
+in finance for evaluating the tradeoff between risk and return (the
+`Sharpe ratio').  Equation \eqref{eq:rportPremOpt} says that the consumer will
+choose a portfolio that earns an excess return that is directly
+related to the (square of the) Sharpe ratio and inversely related to the risk aversion
+coefficient.  Higher reward (per unit of risk) convinces the consumer
+to take the risk necessary to earn higher returns; but higher risk
+aversion convinces the investor to sacrifice return for safety.
+
+Finally, we can ask what effect an exogenous increase in the risk of the 
+risky asset has on the endogenous riskiness of the portfolio once the consumer
+has chosen optimally.  The answer is surprising: The variance of the optimally-chosen
+portfolio is 
+\begin{eqnarray}
+\riskyshare^{2} \sigma^{2}_{\risky} & = & \left(\frac{\eprem}{\CRRA \Evarr}\right)^{2} \sigma^{2}_{\risky}
+\\ & = & \left(\frac{(\eprem/\CRRA)^{2}}{\Evarr}\right)
+\end{eqnarray}
+which is actually {\it smaller} when $\sigma^{2}_{\risky}$ is larger.
+Upon reflection, maybe this makes sense.  Imagine that the consumer
+had adjusted his portfolio share in the risky asset downward just
+enough to return the portfolio's riskiness to its original level that
+it had before the increase in risk.  The consumer would now be bearing
+the same degree of risk but for a lower (mean) rate of return (because
+of his partial reduction in exposure to the risky asset).  It makes
+intuitive sense that the consumer will not be satisfied with this
+``same riskiness, lower return'' outcome and therefore that the
+undesirableness of the risky asset must have increased enough to make
+him want to hold even less than the amount that would return his
+portfolio's riskiness to its original value.
+
+
+\begin{figure}[h]
+\caption{The Risky Portfolio Share $\riskyshare$ and Relative Risk Aversion $\CRRA$} \label{fig:Port}\centering
+\subfigure[The Approximate Risky Portfolio Share $\riskyshare$ Declines as Relative Risk Aversion $\CRRA$ Increases]{
+    \label{fig:Port:a}
+    \fbox{\CDCFig{ShareVsCRRA}}
+}\\
+\vspace{.1in} \subfigure[The Approximation Error for the Portfolio Share in Risky Assets $\riskyshare$ Is Small] {
+    \label{fig:Port:b}
+    \fbox{\CDCFig{ShareApproxErr}}
+} \begin{flushleft} \footnotesize Note: The approximation error is computed by solving for the exactly optimal
+portfolio share numerically.  See the \texttt{Portfolio-CRRA-Derivations.nb} Mathematica notebook for details.
+\end{flushleft}
+\end{figure}
+
+\end{verbatimwrite}
+\input ./body.tex
+
+
+\input bibMake
+
+\end{document}
+
+

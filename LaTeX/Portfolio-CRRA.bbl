@@ -1,0 +1,46 @@
+\ifx\undefined\BySame
+\newcommand{\BySame}{\leavevmode\rule[.5ex]{3em}{.5pt}\ }
+\fi
+\ifx\undefined\textsc
+\newcommand{\textsc}[1]{{\sc #1}}
+\newcommand{\emph}[1]{{\em #1\/}}
+\let\tmpsmall\small
+\renewcommand{\small}{\tmpsmall\sc}
+\fi
+\begin{thebibliography}{}
+
+\harvarditem[Campbell and Viceira]{Campbell and Viceira}{2002}{cvAppendix}
+\textsc{Campbell, John~Y.,  {and} Luis~M. Viceira}  (2002): \emph{Appendix to
+  `Strategic Asset Allocation: Portfolio Choice for Long-Term Investors'}.
+  Oxford University Press, USA, Available on 2011/01/22 at
+  \href{http://kuznets.fas.harvard.edu/~campbell/papers/bookapp.pdf}{\texttt{h%
+  ttp://kuznets.fas.harvard.edu/$\sim$campbell/papers/bookapp.pdf}}.
+
+\harvarditem[Carroll]{Carroll}{2011}{SolvingMicroDSOPs}
+\textsc{Carroll, Christopher~D.}  (2011): ``Solving Microeconomic Dynamic
+  Stochastic Optimization Problems,'' \emph{Archive, Johns Hopkins University},
+  At {\url{http://www.econ2.jhu.edu/people/ccarroll/SolvingMicroDSOPs/}}.
+
+\harvarditem[Haliassos and Bertaut]{Haliassos and
+  Bertaut}{1995}{haliassos&bertaut:fewholdstocks}
+\textsc{Haliassos, Michael,  {and} Carol Bertaut}  (1995): ``Why Do So Few Hold
+  Stocks?,'' \emph{The Economic Journal}, 105, 1110--1129.
+
+\harvarditem[Mehra and Prescott]{Mehra and
+  Prescott}{1985}{mehra&prescott:puzzle}
+\textsc{Mehra, Rajnish,  {and} Edward~C. Prescott}  (1985): ``The Equity
+  Premium: A Puzzle,'' \emph{Journal of Monetary Economics}, 15, 145--61,
+  Available at {
+  \url{http://ideas.repec.org/a/eee/moneco/v15y1985i2p145-161.html}}.
+
+\harvarditem[Merton]{Merton}{1969}{merton:restat}
+\textsc{Merton, Robert~C.}  (1969): ``Lifetime Portfolio Selection under
+  Uncertainty: The Continuous Time Case,'' \emph{Review of Economics and
+  Statistics}, 50, 247--257.
+
+\harvarditem[Samuelson]{Samuelson}{1969}{samuelson:portfolio}
+\textsc{Samuelson, Paul~A.}  (1969): ``Lifetime Portfolio Selection by Dynamic
+  Stochastic Programming,'' \emph{Review of Economics and Statistics}, 51,
+  239--46.
+
+\end{thebibliography}

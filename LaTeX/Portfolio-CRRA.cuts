@@ -1,0 +1,36 @@
+
+Defining the logarithmic `excess return' on the risky asset as
+$\eprem_{t+1}\equiv \risky_{t+1}-\rfree \sim \mathcal{N}(\eprem-\Evarr/2,\Evarr)$,\footnote{Which holds using \handoutM{SumNormsIsNorm} since $\risky_{t+1}$ is normally distributed and $\rfree$ is a
+point mass with zero variance.} % and the excess return factor as $\EPrem_{t+1}=\Risky_{t+1}/\Rfree$
+
+
+which has the convenient implication that if we define the expected excess return factor $\Ex_{t}[\Rport_{t+1}]/\Rfree = e^{\rport_{t+1}-\rfree}$ then (using \handoutM{LogELogNormTimes}) the log of the expected excess return factor is
+\begin{eqnarray}
+  \log \Ex_{t}[\Rport_{t+1}/\Rfree] & = & \Ex_{t}[\riskyshare (\risky_{t+1}-\rfree)] - \riskyshare (1-\riskyshare) \sigma^{2}_{\risky}/2+\riskyshare^{2}\overbrace{\Ex_{t}[\var(\risky_{t+1}-\rfree)/2]}^{=\sigma^{2}_{\risky}/2}
+\\ & = & \riskyshare \risky - \riskyshare \rfree - \riskyshare \
+\end{eqnarray}
+
+
+\begin{eqnarray}
+  \rport_{t+1} \equiv \log \Rport_{t+1} & \sim & \mathcal{N}(\overbrace{\rfree+\riskyshare (\eprem - \sigma^{2}_{\risky}/2)}^{\text{so~} \rport_{t+1} = \rfree+\riskyshare(\eprem_{t+1}-\sigma^{2}_{\risky}/2)},\riskyshare^{2} \sigma^{2}_{\risky}) \label{eq:rportDist}
+\end{eqnarray}
+which has the convenient implication that if we define the excess return factor $\EPrem_{t+1} = e^{\eprem_{t+1}}$ then (using \handoutM{LogELogNormTimes}) the logarithm of the mean excess return factor is
+\begin{eqnarray}
+  \log \Ex_{t}[\Eprem_{t+1}] & = & \riskyshare \risky - \riskyshare 
+\end{eqnarray}
+
+which according to \handoutM{LogELogNorm} implies that the `excess return factor' (the proportion by which 
+the actual return factor exceeds the return on the safe asset) and its log are\footnote{See the software archive for a figure showing that this approximation is extremely accurate.}
+
+
+\begin{eqnarray}
+  \Ex\Rport/\Rfree \equiv \Ex_{t}[\Rport_{t+1}/\Rfree] & \approx & \exp(\riskyshare(\eprem - \sigma^{2}_{\risky}/2) + \riskyshare^{2}\sigma^{2}_{\risky}/2)
+\\ \log \Ex\Rport/\Rfree & \approx & \riskyshare(\eprem - \sigma^{2}_{\risky}/2)+\riskyshare^{2}\sigma^{2}_{\risky}/2 \label{eq:LogERPortExcess}
+\\ & = & \riskyshare \eprem - \riskyshare(1-\riskyshare)\sigma^{2}_{\risky}/2
+\end{eqnarray}
+  The log of the realized (not the expected) portfolio return factor is therefore approximately
+\begin{eqnarray}
+ \rport_{t+1} \equiv \log \Rport_{t+1} & \approx & \rfree + \eprem_{t+1} \riskyshare + \riskyshare(1-\riskyshare)\sigma^{2}_{\risky}/2 \label{eq:CampVic}
+%\\ \rport_{t+1}-\rfree & = & (\eprem_{t+1}+\sigma^{2}_{\risky}/2) \riskyshare -\riskyshare^{2}\sigma^{2}_{\risky}/2 
+\end{eqnarray}
+which is greater than $\rfree + \eprem_{t+1} \riskyshare$ because it is the log of the arithmetic weighted average of $\Rfree$ and $\Risky$ and since the logarithm is a concave function, $\log \Rport_{t+1} < \riskyshare \log \Risky_{t+1} + (1-\riskyshare) \log \Rfree$ by Jensen's inequality.\footnote{Note that this formula produces the expected results that if $\riskyshare=0$ the portfolio return is $\rfree$ while if $\riskyshare=1$ the portfolio return matches the return on the risky asset $\risky_{t+1} = \rfree + \risky_{t+1}-\rfree$.}

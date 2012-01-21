@@ -1,0 +1,5 @@
+The program runs smoothly and produces the two desired graphs. The author also makes detailed comment augmenting the code. I do not find any difficulty in understanding the code. Though it does not matter in terms of coding, the graphs would look better if the lines have some color.
+
+One additional but trivial comment is that for some unknown reasons the xlabel and ylabel of the graph doesn't show in the department computer. I tried to run the program on my computer and they also are not there.
+
+Finally, I would give the author check+ for this program homework. 
